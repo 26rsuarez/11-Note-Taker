@@ -16,18 +16,26 @@ module.exports = function (app) {
         const jsonData = fs.readFileSync("./db/db.json");
         const obj = JSON.parse(jsonData);
         obj.push(req.body);
-        let i=0;
+        let i=1;
         obj.forEach(function(element){
             element.id=i;
             i++;
         });
-        json = JSON.stringify(obj);
+        const json = JSON.stringify(obj);
         fs.writeFileSync("./db/db.json", json);
         res.json(true);
     });
-
-    app.post("/api/notes/:id", function (req, res) {
-        const noteId = req.params.id;
-
+    // the id is retrieved and used to splice the note from the json file, then the file is created again
+    app.delete("/api/notes/:id", function (req, res) {
+        const noteId = req.params.id-1; //the id is one more than the actual index
+        console.log(noteId);
+        const jsonData = fs.readFileSync("./db/db.json");
+        const obj = JSON.parse(jsonData);
+        console.log(obj);
+        obj.splice(noteId, 1);
+        console.log(obj);
+        const json = JSON.stringify(obj);
+        fs.writeFileSync("./db/db.json", json);
+        res.json(true);
     })
 }
