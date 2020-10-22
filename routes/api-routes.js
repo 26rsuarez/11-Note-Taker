@@ -16,8 +16,18 @@ module.exports = function (app) {
         const jsonData = fs.readFileSync("./db/db.json");
         const obj = JSON.parse(jsonData);
         obj.push(req.body);
+        let i=0;
+        obj.forEach(function(element){
+            element.id=i;
+            i++;
+        });
         json = JSON.stringify(obj);
         fs.writeFileSync("./db/db.json", json);
         res.json(true);
+    });
+
+    app.post("/api/notes/:id", function (req, res) {
+        const noteId = req.params.id;
+
     })
 }
